@@ -1,5 +1,4 @@
 \documentclass{article}
-\usepackage{cite}
 \usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{dirtytalk}
@@ -12,6 +11,8 @@
 \usepackage{graphicx}
 \usepackage{microtype}
 \usepackage{float}
+\usepackage[style=ieee]{biblatex}
+\addbibresource{main.bib}
 
 \hypersetup{
     colorlinks=true,
@@ -37,7 +38,6 @@
 
 
 \newpage
-\bibliographystyle{IEEEtran}
-\bibliography{main}
+\printbibliography
 
 \end{document}
