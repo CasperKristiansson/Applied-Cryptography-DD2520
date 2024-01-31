@@ -12,6 +12,42 @@
 \usepackage{microtype}
 \usepackage{float}
 \usepackage[style=ieee]{biblatex}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codered}{rgb}{0.6,0,0}
+\definecolor{codeblue}{rgb}{0.1,0.1,0.99}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codered},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    classoffset=1,
+    morekeywords={self},              % Add 'self' as a keyword
+    keywordstyle=\color{codered},
+    classoffset=0,
+    morecomment=[l][\color{magenta}]{\#},  % Hash-based comments in magenta
+}
+
+\lstset{style=mystyle}
+
 \addbibresource{main.bib}
 
 \hypersetup{
@@ -26,16 +62,89 @@
 
 \title{Assignment \\ Cryptanalysis of Ciphertexts}
 \author{Casper Kristiansson}
-\date{January 2024}
+\date{\today}
+
+\setlength\parindent{0pt}   % Disable paragraph indent.
+\setlength{\parskip}{\bigskipamount}    %Newline after each paragraph
 
 \begin{document}
 
 \maketitle
 
 \section{Introduction}
+This assignment the goal is to solve and find the solution to an encrypted text. The assignment does provide basic information regarding the encryption like the specific characters it will contain and that an underscore encodes to a space and a hash character encodes a newline. This assignment can be completed by solving it using cryptoanalysis.
 
+\section{Cipher 2}
+When solving this assignment I came up that it is most likely that the ciphertext was encrypted using a Vigenere cipher or other polyalphabetic substation ciphers.
 
+I found this out after calculating and estimating the key length based on the Index of Coincidence (IC) \cite{christensen2015cryptanalysis}. Because the Vigenere cipher encrypts information using a repeating key it will end up creating repeating patterns in the encrypted text. Using IC will help to measure the probability of repeated characters. IC can be calculated using this formula (\(N\) is the number of characters and \(f_i\) is the frequency of the \textit{i}-th character):
 
+\[IC = \frac{\sum_{i=1}^{N} f_i (f_i - 1)}{N (N - 1)}\]
+
+We then can by testing different key lengths calculate the probability of it. This can be completed via:
+
+\begin{lstlisting}[language=Python]
+def index_of_coincidence(sequence):
+    N = len(sequence)
+    frequencies = Counter(sequence)
+    return sum(f * (f - 1) for _, f in frequencies.items()) / (N * (N - 1))
+
+def calculate_frequencies_for_key_length(cipher, key_length):
+    chunks = []
+    for i in range(key_length):
+        chunk = ''
+        for j in range(i, len(cipher), key_length):
+            chunk += cipher[j]
+        chunks.append(chunk)
+
+    ics = []
+    for chunk in chunks:
+        ics.append(index_of_coincidence(chunk))
+
+    return np.mean(ics)
+\end{lstlisting}
+
+Using this approach we will then get an estimate of the key length. For this specific text, we saw that at the key length 12, we got a spike the the probability. As the next step, we want to perform a frequency analysis on the cipher text. As stated earlier certain characters have a higher probability of appearing than other characters \cite{christensen2015cryptanalysis}. Therefore we can use chi-squared to calculate how well observed data can fit expected data. This can be useful because then we can estimate the best fit of characters. Chi-squared can be calculated by the following formula (\(O_i\) is the observed frequency and \(E_i\) is the expected frequency).
+
+\[\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}\]
+
+This can then be converted into code by:
+
+\begin{lstlisting}[language=Python]
+def chi_squared_statistic(text, expected_freq):
+    observed_freq = Counter(text)
+    for char in characters:
+        observed_freq[char] = observed_freq.get(char, 0) / len(text)
+
+    chi_squared = 0
+    for char in characters:
+        expected = expected_freq.get(char, 0)
+        chi_squared += ((observed_freq[char] - expected) ** 2) / expected if expected else 0
+
+    return chi_squared
+\end{lstlisting}
+
+The next step is to apply Caesar shift \cite{shiftpdf3:online} to the cipher and the goal is to try to align and shift it until we get the highest probability of the character frequency distribution. This means that we first split the cipher text into different columns based on the key length. We then for each column perform Caesar shift between 1 to 38 (number of possible characters) and on each shifted text we calculate the chi-squared probability. We then know that the Caesar shift with the lowest chi-squared value has the best shift. For each of the twelve columns, we get the best Caesar shift for each of them which in this case results in [24, 28, 32, 36, 2, 6, 10, 14, 18, 22, 8, 6]. 
+
+\begin{lstlisting}[language=Python]
+def caesar_shift(sequence, shift):
+    shifted_sequence = ''
+    for char in sequence:
+        shifted_sequence += characters[(characters.index(char) - shift) % len(characters)]
+    return shifted_sequence
+
+def find_best_shift_for_column(column):
+    chi_squared_by_shift = {}
+
+    for shift in range(len(characters)):
+        chi_squared_by_shift[shift] = chi_squared_statistic(caesar_shift(column, shift), english_letter_freq)
+
+    return min(chi_squared_by_shift, key=chi_squared_by_shift.get)
+\end{lstlisting}
+
+We then can simply apply the best shifts to the cipher for each column and then combine the text to get its decrypted text. But by doing this we can see that the original text is:
+
+"HARD AS I CAN PERCEIVE FROM MANY CIRCUMSTANCES AND IN SHORT POSSESSES A LARGE STOCK OF INFORMATION WHEN HE HEARD THAT I AM DRAWING A GOOD DEAL AND THAT I KNOW GREEK TWO WONDERFUL..."
 
 \newpage
 \printbibliography
