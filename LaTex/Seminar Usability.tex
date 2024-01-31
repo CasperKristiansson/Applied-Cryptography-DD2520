@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage{tabularx}
+\usepackage{dirtytalk}
+\usepackage{pgfplotstable} 
+\usepackage{pgfplots}
+\usepackage{datatool}
+\usepackage{siunitx}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage[style=ieee]{biblatex}
+\addbibresource{main.bib}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=blue,
+}
+
+\pgfplotsset{compat=1.18}
+
+\title{Seminar Usability}
+\author{Casper Kristiansson}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Insights from Papers}
+When choosing the different papers to read, I decided to go for the "Developer side" category. In this category, I will be reading and drawing conclusions from the two papers \say{Developers are not the enemy!: The need for usable security apis}  by Green, Matthew, and Matthew Smith \cite{developersAreNot} and \say{Usability Smells: An Analysis of Developers’ Struggle With Crypto Libraries} by Patnaik, Nikhil, Joseph Hallett, and Awais Rashid \cite{usabilitySmells}.
+
+\subsection{Usability Smells: An Analysis of Developers’ Struggle With Crypto Libraries}
+\begin{itemize}
+    \item The paper concludes that there are a lot of usability issues with cryptographic libraries. The authors did a thematic analysis and related issues with these libraries. These issues were such as missing documentation or bad documentation.
+    \item The paper finds what the common struggles are for a developer. Finding out what a developer is looking for or the common struggles that exist in libraries especially cryptographic libraries can be improved. Common struggles are missing documentation, confusion of API usage, and the overall lack of cryptographic knowledge.
+\end{itemize}
+
+\subsection{Developers are not the enemy!: The need for usable security apis}
+\begin{itemize}
+    \item It highlights the importance of user-friendliness in security and privacy API for developers.
+    \item APIs need to be well-designed in order to enhance the effectiveness of security systems by helping developers implement security features the correct way (lack of knowledge).
+\end{itemize}
+
+
+\section{Technology: End-to-End Encrypted Email Service}
+\subsection{What is it}
+I chose the technology of End-To-End Encrypted Email Service \cite{semester}. It is a type of email platform that provides improved security by encrypting emails from both the sender and receiver.
+
+\subsection{What it is used for}
+The service is used for secure communication. Ensuring that all messages that are sent between the sender and receiver are encrypted on both sides will ensure that only the intended recipient can read the content of an email.
+
+\subsection{How it works}
+The service encrypts the content of an email at the sender's end and then decrypts it only at the recipient's end. This will prevent any interception or unauthorized access during transmission.
+
+
+\section{Applied Insights from Papers}
+\begin{itemize}
+    \item Both papers mention the struggle of poorly documented and developed APIs in cryptographic libraries. Because these APIs have these flaws it might lead to the developers of the End-To-End Encrypted Email Services implementing security features in the wrong way. Because of this, it could lead to the application losing its main purpose.
+    \item If the End-to-End Encrypted Email Service will serve its API service the API must be built in the best way possible. This means that it should be user-friendly in terms of cryptographic knowledge and well-documented. Doing this will allow developers that use the End-To-End Encrypted Email Service APIs to utilize them in the correct and best way.
+\end{itemize}
+
+
+\newpage
+\printbibliography
+
+\end{document}
