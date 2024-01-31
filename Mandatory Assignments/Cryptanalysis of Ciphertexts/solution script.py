@@ -6,7 +6,7 @@ with open(r'Mandatory Assignments\Cryptanalysis of Ciphertexts\cipher_2.txt') as
 
 cipher_2 = cipher_2.replace("\n", "")
 characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_#"
-max_key_length = 20
+max_key_length = 50
 english_letter_freq = {
     'E': 12.7, 'T': 9.1, 'A': 8.2, 'O': 7.5, 'I': 7.0, 'N': 6.7, 'S': 6.3, 'H': 6.1, 'R': 6.0,
     'D': 4.3, 'L': 4.0, 'C': 2.8, 'U': 2.8, 'M': 2.4, 'W': 2.4, 'F': 2.2, 'G': 2, 'Y': 2.0,
@@ -17,41 +17,43 @@ english_letter_freq = {
 def index_of_coincidence(sequence):
     N = len(sequence)
     frequencies = Counter(sequence)
-    ic = sum(f * (f - 1) for _, f in frequencies.items()) / (N * (N - 1))
-    return ic
+    return sum(f * (f - 1) for _, f in frequencies.items()) / (N * (N - 1))
 
 
 def calculate_frequencies_for_key_length(cipher, key_length):
-    chunks = [cipher[i::key_length] for i in range(key_length)]
-    ics = [index_of_coincidence(chunk) for chunk in chunks]
+    chunks = []
+    for i in range(key_length):
+        chunk = ''
+        for j in range(i, len(cipher), key_length):
+            chunk += cipher[j]
+        chunks.append(chunk)
+
+    ics = []
+    for chunk in chunks:
+        ics.append(index_of_coincidence(chunk))
+
     avg_ic = np.mean(ics)
     return avg_ic
 
 
-def frequency_distribution(text):
-    freq_dist = Counter(text)
-    freq_dist = {char: freq_dist.get(char, 0) / len(text) for char in characters}
-    return freq_dist
+def chi_squared_statistic(text, expected_freq):
+    observed_freq = Counter(text)
+    for char in characters:
+        observed_freq[char] = observed_freq.get(char, 0) / len(text)
+
+    chi_squared = 0
+    for char in characters:
+        expected = expected_freq.get(char, 0)
+        chi_squared += ((observed_freq[char] - expected) ** 2) / expected if expected else 0
+
+    return chi_squared
 
 
 def caesar_shift(sequence, shift):
     shifted_sequence = ''
     for char in sequence:
-        if char in characters:
-            shifted_sequence += characters[(characters.index(char) - shift) % len(characters)]
-        else:
-            shifted_sequence += char
+        shifted_sequence += characters[(characters.index(char) - shift) % len(characters)]
     return shifted_sequence
-
-
-def chi_squared_statistic(text, expected_freq):
-    observed_freq = frequency_distribution(text)
-    chi_squared = 0
-    for char in characters:
-        observed = observed_freq[char]
-        expected = expected_freq[char] if char in expected_freq else 0
-        chi_squared += ((observed - expected) ** 2) / expected if expected else 0
-    return chi_squared
 
 
 def find_best_shift_for_column(column):
@@ -93,9 +95,9 @@ english_letter_freq = {char: freq / total_freq for char, freq in english_letter_
 key_length = 12
 columns = [cipher_2[i::key_length] for i in range(key_length)]
 best_shifts = [find_best_shift_for_column(column) for column in columns]
-best_shifts
 
 # Step 4 - Decode the text
 decoded_columns = apply_shifts_to_columns(columns, best_shifts)
 decoded_text = interleave_columns(decoded_columns)
+decoded_text = decoded_text.replace("_", " ")
 print(decoded_text[:500])
