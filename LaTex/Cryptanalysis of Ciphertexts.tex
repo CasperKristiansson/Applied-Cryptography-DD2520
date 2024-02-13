@@ -119,7 +119,8 @@ def chi_squared_statistic(text, expected_freq):
     chi_squared = 0
     for char in characters:
         expected = expected_freq.get(char, 0)
-        chi_squared += ((observed_freq[char] - expected) ** 2) / expected if expected else 0
+        if expected != 0:
+            chi_squared += ((observed_freq[char] - expected) ** 2) / expected 
 
     return chi_squared
 \end{lstlisting}
