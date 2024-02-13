@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{tabularx}
+\usepackage{dirtytalk}
+\usepackage{pgfplotstable} 
+\usepackage{pgfplots}
+\usepackage{datatool}
+\usepackage{siunitx}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage[style=ieee]{biblatex}
+\addbibresource{main.bib}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=blue,
+}
+
+\pgfplotsset{compat=1.18}
+
+\title{Seminar Impact Considerations}
+\author{Casper Kristiansson}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Identity verification using GPG}
+
+\subsection{What is it}
+GPG is a free and open-source library where it is used to encrypt and sign data. The goal is to ensure privacy and authenticity. The tools enable users to encrypt messages and files and create digital signatures.
+
+\subsection{What it is used for}
+In the context of identity verification, GPG is used to prove the ownership of an email address or digital identity securely. By signing a message or a document with their private key a user can prove their identity. It can be proven using the public key which can decrypt and verify the signature. This process is often used for secure email communication and code signing.
+
+\subsection{How it works}
+First, a user generates a pair of keys, a private key and a public key. For a user to verify its identity the user signs a message or a document with their private key. The sender's public key can then decrypt the signature to verify that the signature is valid.
+
+
+\newpage
+\printbibliography
+
+\end{document}
