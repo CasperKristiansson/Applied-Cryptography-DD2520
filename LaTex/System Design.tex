@@ -1,0 +1,87 @@
+\documentclass[9pt]{extarticle}
+\usepackage{tabularx}
+\usepackage{dirtytalk}
+\usepackage{pgfplotstable} 
+\usepackage{pgfplots}
+\usepackage{datatool}
+\usepackage{siunitx}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage[style=ieee]{biblatex}
+\addbibresource{main.bib}
+\usepackage[margin=1in]{geometry}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=blue,
+}
+
+\pgfplotsset{compat=1.18}
+
+\title{System Design INL1 Written}
+\author{Casper Kristiansson}
+\date{\today}
+
+
+\begin{document}
+
+\maketitle
+
+\section{System Assumptions - \textit{Components and their resources}}
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra.
+
+\section{User Assumptions - \textit{Their goals and capabilities}}
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra.
+
+\section{Adversary Assumptions - \textit{Their goals and capabilities}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Requirements - \textit{e.g., Security properties, authentication, performance}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Architecture - \textit{e.g., Server and smartcard or smartphone, what is computed where}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Data at Rest - \textit{How and where is it stored}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Data in Transit - \textit{What is sent and how}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Cryptographic Algorithms and Protocols - \textit{e.g., AES, RSA}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Implementation - \textit{e.g., libraries}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Parameters - \textit{e.g., key length}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Ensuring Randomness}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra.
+
+\section{Trade-offs and Risks - \textit{e.g., privacy vs. utility, cost vs. security}}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Legal Considerations}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Usability Considerations}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra.
+
+\section{Non-Cryptographic Threats and Countermeasures}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\section{Cryptographic Threats and Countermeasures}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac vestibulum felis, a facilisis odio. Aenean aliquam vitae lorem et fermentum. Ut dapibus nec diam eleifend suscipit. Cras placerat, lorem id laoreet scelerisque, ligula sem cursus magna, ut mollis nibh est vel erat. Praesent bibendum sapien tellus. Donec est lectus, interdum scelerisque risus vel, feugiat condimentum neque. Aliquam eget justo nisl. Pellentesque lobortis mauris quis felis aliquam dignissim. Phasellus venenatis lectus arcu, at vestibulum metus commodo ut. Curabitur sit amet risus mollis, lobortis nisl ut, pulvinar tellus. Suspendisse tincidunt viverra pharetra. Praesent ut mauris in eros tempor posuere in ut diam. Donec sapien augue, accumsan a quam non, mattis hendrerit ante. Morbi hendrerit quam turpis, vitae elementum massa aliquet pharetra. 
+
+\newpage
+\printbibliography
+
+\end{document}
