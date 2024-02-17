@@ -31,17 +31,39 @@
 
 \maketitle
 
-\section{Identity verification using GPG}
+\noindent \textbf{Technology}: Identity verification using GPG
 
+\section{Before Seminar}
 \subsection{What is it}
-GPG is a free and open-source library where it is used to encrypt and sign data. The goal is to ensure privacy and authenticity. The tools enable users to encrypt messages and files and create digital signatures.
+GPG is a free and open-source library used to encrypt and sign data \cite{gpg}. The goal is to ensure privacy and authenticity. The tools enable users to encrypt messages and files and create digital signatures.
 
 \subsection{What it is used for}
-In the context of identity verification, GPG is used to prove the ownership of an email address or digital identity securely. By signing a message or a document with their private key a user can prove their identity. It can be proven using the public key which can decrypt and verify the signature. This process is often used for secure email communication and code signing.
+In the context of identity verification, GPG is used to prove the ownership of an email address or digital identity securely. A user can prove their identity by signing a message or a document with their private key. It can be proven using the public key to decrypt and verify the signature. This process is often used for secure email communication and code signing.
 
 \subsection{How it works}
 First, a user generates a pair of keys, a private key and a public key. For a user to verify its identity the user signs a message or a document with their private key. The sender's public key can then decrypt the signature to verify that the signature is valid.
 
+
+\section{After Seminar}
+I chose to pick the two cards; Inside Knowledge and Personal Data. Both of these cards were chosen because their relevance is directly connected to the functionality of GPG. Addressing these two cards' concerns can help in providing insight into how to mitigate risk and enhance user trust in GPG.
+
+\subsection{Inside Knowledge (Adversary's Resources)}
+When developing a technology such as GPG it is important to understand what type of inside knowledge a adversary might have or gain access to and how that information can be used to perform attacks on the technology. If an attack would access a person's keys it could lead to the attacker utilizing the keys to impersonate the original owner of the keys. This could for example be:
+
+\begin{enumerate}
+    \item \textbf{Understanding GPG's Mechanics:} An attacker might have a good understanding of how GPG's encryption, decryption, and signing verification work and possibly could exploit vulnerabilities in the implementation. 
+    \item \textbf{Good knowledge in Key management Practices:} A big issue often with encryption technologies that utilize keys is the poor management of the key. This for example could be reusing keys across multiple platforms, not updating or rotating keys. If not applying the recommended practices it could lead to unauthorized access to the keys.
+    \item \textbf{Social Engineering:} Another big thing is social engineering. If an attacker has a good understanding of social dynamics it could lead to phishing attacks where the attack might trick users into revealing their private keys.
+\end{enumerate}
+
+\subsection{Personal Data (Human Impact)}
+The usage of GPG for identity verification involves a unique set of regards to the collection, storage, and sharing of personal data \cite{WhatIsGP82:online}. GPG is fundamentally designed to enhance privacy and security with digital communication. But even so, GPG could potentially compromise and corrupt the collected for example via:
+
+\begin{enumerate}
+    \item \textbf{Email Addresses:} GPG is commonly used for securing email communication. This means that a user's email address with be involved in the process where it will work as an identifier and an endpoint for the encrypted communication.
+    \item \textbf{Signatures and Encrypted Messages:} GPG allows users to sign documents, messages, and code commits. By doing this, it means that the signed piece of information will directly be linked with an individual's identity.
+    \item \textbf{Unauthorized access:} If an attacker gains a user's private key it means that they can impersonate the user and can sign documents or messages to further access restricted resources of the original user.
+\end{enumerate}
 
 \newpage
 \printbibliography
