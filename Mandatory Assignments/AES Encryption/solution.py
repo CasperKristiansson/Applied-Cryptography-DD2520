@@ -52,14 +52,8 @@ class AES:
     of exactly 16 bytes. There are at most 10^6 blocks to
     encrypt.
     """
-    def __init__(self, key_block, data_blocks):
-        self.block_size = 16
-        self.key_length = 16
-        self.rounds = 10        # 10 rounds for 128-bit keys, 12 rounds for 192-bit keys, and 14 rounds for 256-bit keys
-
-        self.original_key = key_block
-        self.key = self.key_expansion(key_block)
-        self.data = data_blocks
+    def __init__(self, key):
+        self.key = self.key_expansion(key)
 
     def sub_and_rot_word(self, word):
         """Substitute each byte in the word with the corresponding byte in the s_box,
@@ -97,45 +91,44 @@ class AES:
         return [[s_box[byte] for byte in word] for word in state]
 
     def shift_rows(self, state):
-        return [state[i][i:] + state[i][:i] for i in range(len(state))]
+        state[0][1], state[1][1], state[2][1], state[3][1] = state[1][1], state[2][1], state[3][1], state[0][1]
+        state[0][2], state[1][2], state[2][2], state[3][2] = state[2][2], state[3][2], state[0][2], state[1][2]
+        state[0][3], state[1][3], state[2][3], state[3][3] = state[3][3], state[0][3], state[1][3], state[2][3]
+
+        return state
 
     def add_round_key(self, state, key):
         return [[byte ^ key[i][j] for j, byte in enumerate(word)] for i, word in enumerate(state)]
 
-    def multiply(self, a, b):
-        p = 0
-        for _ in range(8):
-            if b & 1:
-                p ^= a
-            hi_bit_set = a & 0x80
-            a <<= 1
-            if hi_bit_set:
-                a ^= 0x11b  # x^8 + x^4 + x^3 + x + 1
-            b >>= 1
-        return p % 256
+    def shift_if_can(self, a):
+        if a & 0x80:  # If the leftmost bit (bit 7) is set
+            return ((a << 1) ^ 0x1B) & 0xFF  # Perform the shift, XOR with 0x1B, and ensure it's within a byte
+        else:
+            return a << 1  # Just perform the shift if the leftmost bit is not set
 
     def mix_columns(self, state):
         """
         4.2.3 The MixColumn transformation - https://www.cs.miami.edu/home/burt/learning/Csc688.012/rijndael/rijndael_doc_V2.pdf
         In MixColumn, the columns of the State are considered as polynomials over GF(2^8) and
-        multiplied modulo x^4+ 1 with a fixed polynomial c(x )
+        multiplied modulo x^4+1 with a fixed polynomial c(x)
         """
-        result = [[0 for _ in range(4)] for _ in range(4)]
-        for c in range(4):
-            for r in range(4):
-                # Accumulate the results with bitwise XOR instead of integer sum
-                value = 0
-                for i in range(4):
-                    value ^= self.multiply(mixed_columns[r][i], state[i][c])
-                result[r][c] = value
+        for i in range(4):
+            t = state[i][0] ^ state[i][1] ^ state[i][2] ^ state[i][3]
+            u = state[i][0]
 
-        return result
+            for j in range(3):
+                state[i][j] ^= t ^ self.shift_if_can(state[i][j] ^ state[i][(j + 1) % 4])
 
-    def aes_encrypt(self, block):
+            state[i][3] ^= t ^ self.shift_if_can(state[i][3] ^ u)
+
+        return state
+
+    def encrypt(self, block):
         state = [list(block[i:i + 4]) for i in range(0, len(block), 4)]
         state = self.add_round_key(state, self.key[:4])
 
-        for current_round in range(1, self.rounds):
+        # 10 rounds for 128-bit keys, 12 rounds for 192-bit keys, and 14 rounds for 256-bit keys
+        for current_round in range(1, 10):
             state = self.sub_bytes(state)
             state = self.shift_rows(state)
             state = self.mix_columns(state)
@@ -148,11 +141,6 @@ class AES:
 
         return state
 
-    def encrypt(self):
-        for block in self.data:
-            encrypted_block = self.aes_encrypt(block)
-            print("".join([f"{byte:02x}" for word in encrypted_block for byte in word]).upper())
-
 
 def parse_input_from_file(file_path):
     with open(file_path, 'rb') as file:
@@ -164,35 +152,50 @@ def parse_input_from_file(file_path):
             blocks.append(block)
             block = file.read(16)
 
-    print("Key:", ''.join([f'{byte:02x}' for byte in key]).upper())
-
     return key, blocks
 
 
-def read_input():
-    key = sys.stdin.buffer.read(16)
-    if not key:
-        raise ValueError("Key not provided")
+def run_kattis():
+    if os.path.exists(os.path.join(os.path.dirname(__file__), "aes_sample.in")):
+        import io
+        byte_input = b'\xf4\xc0 \xa0\xa1\xf6\x04\xfd4?\xacj~j\xe0\xf9\xf2\x95\xb91\x8b\x99D4\xd9=\x98\xa4\xe4I\xaf\xd8\xf2\x95\xb91\x8b\x99D4\xd9=\x98\xa4\xe4I\xaf\xd8'
+        byte_stream = io.BytesIO(byte_input)
+        sys.stdin = io.TextIOWrapper(byte_stream, encoding='utf-8', newline='\n')
 
-    data_blocks = []
+    key = sys.stdin.buffer.read(16)
+
+    aes = AES(key)
+    encrypted_data = b''
 
     while True:
         block = sys.stdin.buffer.read(16)
         if not block:
             break
-        if len(block) != 16:
-            raise ValueError("Data block size incorrect. Each block must be exactly 16 bytes.")
-        data_blocks.append(block)
 
-    return key, data_blocks
+        encrypted_block = aes.encrypt(block)
+        encrypted_data += b"".join([bytes([byte]) for word in encrypted_block for byte in word])
+
+    sys.stdout.buffer.write(encrypted_data)
+
+
+def run_locally(file_path):
+    key, blocks = parse_input_from_file(file_path)
+    aes = AES(key)
+    encrypted_data = b''
+
+    for block in blocks:
+        encrypted_block = aes.encrypt(block)
+        if os.path.exists(file_path):
+            print("".join([f"{byte:02x}" for word in encrypted_block for byte in word]).upper())
+
+        encrypted_data += b"".join([bytes([byte]) for word in encrypted_block for byte in word])
+
+    sys.stdout.buffer.write(encrypted_data)
 
 
 if __name__ == "__main__":
     file_path = os.path.join(os.path.dirname(__file__), "aes_sample.in")
     if os.path.exists(file_path):
-        key, blocks = parse_input_from_file(file_path)
+        run_locally(file_path)
     else:
-        key, blocks = read_input()
-
-    aes = AES(key, blocks)
-    aes.encrypt()
+        run_kattis()
