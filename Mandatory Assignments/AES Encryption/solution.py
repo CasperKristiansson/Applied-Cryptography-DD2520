@@ -165,7 +165,6 @@ def run_kattis():
     key = sys.stdin.buffer.read(16)
 
     aes = AES(key)
-    encrypted_data = b''
 
     while True:
         block = sys.stdin.buffer.read(16)
@@ -173,9 +172,7 @@ def run_kattis():
             break
 
         encrypted_block = aes.encrypt(block)
-        encrypted_data += b"".join([bytes([byte]) for word in encrypted_block for byte in word])
-
-    sys.stdout.buffer.write(encrypted_data)
+        sys.stdout.buffer.write(b"".join([bytes([byte]) for word in encrypted_block for byte in word]))
 
 
 def run_locally(file_path):
