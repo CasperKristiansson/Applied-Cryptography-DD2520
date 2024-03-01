@@ -1,0 +1,96 @@
+type FINMarker.
+type ID.
+type Nonce.
+type Key.
+
+table ltks(ID, Key).
+
+free psk:Key [private].
+free ch:channel.
+free aMessage:bitstring [private].
+
+fun KDF(Key, bitstring):Key.
+fun MAC(Key, bitstring):bitstring.
+fun enc(Key, bitstring):bitstring.
+reduc forall k:Key, b:bitstring;  dec(k, enc(k, b)) = b.
+
+free FIN:FINMarker.
+
+event evIRunning(Key).
+event evRRunning(Key).
+event evIComplete(Key).
+event evRComplete(Key).
+event evReachI.
+event evReachR.
+event evRecvAMessage(bitstring).
+
+(* client *)
+let Idummy(ltk:Key, id:ID) = 0.
+
+let I(ltk:Key, id:ID) =
+    new nI:Nonce;
+    out(ch, (id, nI));
+    in(ch, (nR:Nonce, mac:bitstring));
+    if mac = MAC(ltk, (nI, nR, id)) then
+        let k = KDF(ltk, (nI, nR)) in
+        event evIRunning(k);
+        out(ch, (MAC(ltk, (FIN, nR, nI, id))));
+        event evIComplete(k);
+        (* Section 4: Addition of transmission of an encrypted and MACed message.
+         * Three parts are needed: this sending, the receiving code in R,
+         * and the new properties attacker (aMessage) and that R received
+         * the aMessage.
+         * In all three places the relevant code is encapsulated in
+         * BEGIN/END comments.
+         *)
+        (* BEGIN *)
+        let ct = enc(k, aMessage) in
+        out(ch, (ct, MAC(k, ct)));
+        (* END *)
+        event evReachI.
+
+(* server *)
+let R() =
+    new nR:Nonce;
+    in(ch, (id:ID, nI:Nonce));
+    get ltks(=id, ltkPeer:Key) in
+    let k = KDF(ltkPeer, (nI, nR)) in
+    event evRRunning(k);
+    out(ch, (nR, MAC(ltkPeer, (nI, nR, id))));
+    in(ch, mac:bitstring);
+    if mac = MAC(ltkPeer, (FIN, nR, nI, id)) then
+        event evRComplete(k);
+        (* Section 4: Addition of transmission of an encrypted and MACed
+         * message.
+         *)
+        (* BEGIN *)
+        in(ch, (ct:bitstring, mac2:bitstring));
+        if mac2 = MAC(k, ct) then
+            event evRecvAMessage(dec(k, ct)); 
+        (* END *)
+        event evReachR.
+
+(* Sanity *)
+query event(evReachI).
+query event(evReachR).
+
+(* Session key secrecy *)
+query secret k.
+
+(* Key Authentication
+ * The idea is that I and R shold agree on the output key from the KDF
+ *)
+query k:Key; event(evIComplete(k)) ==> event(evRRunning(k)).
+query k:Key; event(evRComplete(k)) ==> event(evIRunning(k)).
+
+(* Section 4: Addition of transmission of an encrypted and MACed message.
+ * The "attacker query" is used to check secrecy of built up terms.
+ * The "secret query" is used to check secrecy of bound names or variables.
+ *)
+(* BEGIN *)
+query attacker(aMessage).
+query message:bitstring; event(evRecvAMessage(message)) ==> message = aMessage.
+(* END *)
+
+process
+    !(new ltk:Key; new id:ID; insert ltks(id, ltk); !I(ltk, id)) | !(R)
