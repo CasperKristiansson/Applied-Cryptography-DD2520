@@ -1,6 +1,9 @@
 use std::io::{self, Read, Write};
 
 // S-Box https://www2.rivier.edu/journal/roaj-fall-2010/j455-selent-aes.pdf
+// Non-Linearity: The S-Box is a non-linear substitution table that operates on individual bytes.
+// We use S-Box because it allows for avalanche effect, which means that a small change in the input
+// (e.g., one bit) results in a large change in the output.
 static S_BOX: [u8; 256] = [
     0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
     0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
@@ -21,17 +24,18 @@ static S_BOX: [u8; 256] = [
 ];
 
 // Constants are derived from the powers of 2 in the finite field GF(2^8)
-static R_CON: [[u8; 4]; 10] = [
-    [0x01, 0x00, 0x00, 0x00],   // round 1: 2^0
-    [0x02, 0x00, 0x00, 0x00],   // round 2: 2^1
-    [0x04, 0x00, 0x00, 0x00],   // round 3: 2^2
-    [0x08, 0x00, 0x00, 0x00],   // round 4: 2^3
-    [0x10, 0x00, 0x00, 0x00],   // round 5: 2^4
-    [0x20, 0x00, 0x00, 0x00],   // round 6: 2^5
-    [0x40, 0x00, 0x00, 0x00],   // round 7: 2^6
-    [0x80, 0x00, 0x00, 0x00],   // round 8: 2^7
-    [0x1b, 0x00, 0x00, 0x00],   // round 9: 2^4 + 2^3 + 2^1 + 2^0
-    [0x36, 0x00, 0x00, 0x00]    // round 10: 2^5 + 2^4 + 2^1
+// Prevents attacks based on the symmetries in the cipher's structure
+static R_CON: [u8; 10] = [
+    0x01,   // round 1: 2^0
+    0x02,   // round 2: 2^1
+    0x04,   // round 3: 2^2
+    0x08,   // round 4: 2^3
+    0x10,   // round 5: 2^4
+    0x20,   // round 6: 2^5
+    0x40,   // round 7: 2^6
+    0x80,   // round 8: 2^7
+    0x1b,   // round 9: 2^4 + 2^3 + 2^1 + 2^0
+    0x36    // round 10: 2^5 + 2^4 + 2^1
 ];
 
 struct AES {
@@ -59,7 +63,7 @@ impl AES {
     needs to be 16 bytes because the block size is 16 bytes. Therefore, the cipher key needs to be expanded
     from 16 bytes to 16*(r + 1) bytes or 176 bytes. The expanded key is then broken up into round keys.
     Round keys are added to the current state after each round and before the first round. The details on the
-    key expansion algorithm are complex and will be skipped.
+    key expansion algorithm are complex and will be skipped. 128 (10), 192 (12), and 256 (14) bits
     */
     fn key_expansion(key: Vec<u8>) -> Vec<Vec<u8>> {
         let mut w: Vec<Vec<u8>> = Vec::new();
@@ -71,7 +75,7 @@ impl AES {
             let mut temp = w[i-1].clone();
             if i % 4 == 0 {
                 temp = AES::sub_and_rot_word(&temp);
-                temp[0] ^= R_CON[i / 4 - 1][0];
+                temp[0] ^= R_CON[i / 4 - 1];
             }
             let mut new_word = Vec::new();
             for j in 0..4 {
@@ -163,9 +167,9 @@ impl AES {
         self.add_round_key(&mut state, 0);
 
         for round in 1..10 {
-            self.sub_bytes(&mut state);
-            self.shift_rows(&mut state);
-            self.mix_columns(&mut state);
+            self.sub_bytes(&mut state);             // Substitution
+            self.shift_rows(&mut state);            // Permutation
+            self.mix_columns(&mut state);           // Diffusion / Permutation
             self.add_round_key(&mut state, round);
         }
 
