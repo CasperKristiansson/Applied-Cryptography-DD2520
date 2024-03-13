@@ -48,7 +48,7 @@ one or more blocks to encrypt using that key. The 128-bit
 key is given as the first 16 bytes of the file. The first
 byte gives the first 8 bits, and so on. Each block consists
 of exactly 16 bytes. There are at most 10^6 blocks to
-encrypt.
+encrypt. Diffusion
 */
 impl AES {
     fn new(key: Vec<u8>) -> Self {
@@ -63,7 +63,7 @@ impl AES {
     needs to be 16 bytes because the block size is 16 bytes. Therefore, the cipher key needs to be expanded
     from 16 bytes to 16*(r + 1) bytes or 176 bytes. The expanded key is then broken up into round keys.
     Round keys are added to the current state after each round and before the first round. The details on the
-    key expansion algorithm are complex and will be skipped. 128 (10), 192 (12), and 256 (14) bits
+    key expansion algorithm are complex and will be skipped. 128 (10), 192 (12), and 256 (14)
     */
     fn key_expansion(key: Vec<u8>) -> Vec<Vec<u8>> {
         let mut w: Vec<Vec<u8>> = Vec::new();
